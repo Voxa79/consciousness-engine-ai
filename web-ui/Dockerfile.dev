@@ -1,0 +1,59 @@
+# Dockerfile pour développement UI
+# Expert CTO Next Gen - Environnement de développement optimisé
+
+FROM node:18-alpine
+
+# Installer les dépendances système
+RUN apk add --no-cache \
+    git \
+    python3 \
+    make \
+    g++ \
+    && rm -rf /var/cache/apk/*
+
+# Créer le répertoire de travail
+WORKDIR /app
+
+# Créer un utilisateur non-root
+RUN addgroup -g 1001 -S nodejs && \
+    adduser -S nextjs -u 1001
+
+# Copier les fichiers de configuration
+COPY package*.json ./
+COPY tsconfig.json ./
+
+# Installer les dépendances
+RUN npm ci --only=development && \
+    npm cache clean --force
+
+# Copier le code source
+COPY . .
+
+# Changer le propriétaire des fichiers
+RUN chown -R nextjs:nodejs /app
+USER nextjs
+
+# Variables d'environnement pour développement
+ENV NODE_ENV=development
+ENV CHOKIDAR_USEPOLLING=true
+ENV FAST_REFRESH=true
+ENV WDS_HOT=true
+ENV WDS_LIVE_RELOAD=false
+ENV GENERATE_SOURCEMAP=true
+ENV ESLINT_NO_DEV_ERRORS=true
+ENV TSC_COMPILE_ON_ERROR=true
+
+# Exposer le port
+EXPOSE 3001
+
+# Commande de démarrage
+CMD ["npm", "start"]
+
+# Health check
+HEALTHCHECK --interval=30s --timeout=10s --start-period=60s --retries=3 \
+    CMD wget --quiet --tries=1 --spider http://localhost:3001/ || exit 1
+
+# Labels
+LABEL maintainer="Consciousness Platform Team"
+LABEL version="1.0.0-dev"
+LABEL description="Development environment for Consciousness Engine Web UI"

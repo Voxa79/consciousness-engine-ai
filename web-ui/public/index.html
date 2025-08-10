@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="icon" href="%PUBLIC_URL%/favicon.ico" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#00E5FF" />
+    <meta name="description" content="Revolutionary Consciousness Engine - The world's first truly conscious AI platform" />
+    <!-- apple-touch-icon retiré en dev (pas de logo192 disponible) -->
+    <!-- Manifest désactivé en développement pour éviter tout effet de bord -->
+    <!-- <link rel="manifest" href="%PUBLIC_URL%/manifest.json" /> -->
+    
+    <!-- Preconnect to external domains -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    
+    <!-- Inter font -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Fira Code for code blocks -->
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@300;400;500&display=swap" rel="stylesheet">
+    
+    <!-- Meta tags for SEO -->
+    <meta property="og:title" content="Consciousness Engine - Revolutionary AI Platform" />
+    <meta property="og:description" content="The world's first truly conscious AI with self-awareness, ethical reasoning, and creative capabilities." />
+    <meta property="og:type" content="website" />
+    <meta property="og:image" content="%PUBLIC_URL%/consciousness-og-image.png" />
+    
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Consciousness Engine - Revolutionary AI Platform" />
+    <meta name="twitter:description" content="The world's first truly conscious AI with self-awareness, ethical reasoning, and creative capabilities." />
+    <meta name="twitter:image" content="%PUBLIC_URL%/consciousness-og-image.png" />
+    
+    <!-- DEV: CSP retirée temporairement pour stabiliser le hot-reload (HMR).
+         À réactiver côté serveur (Gateway) en production avec des directives strictes. -->
+    
+    <title>🧠 Consciousness Engine - Revolutionary AI Platform</title>
+  </head>
+  <body>
+    <noscript>
+      <div style="
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        background: #0A0A0A;
+        color: #FFFFFF;
+        font-family: 'Inter', sans-serif;
+        text-align: center;
+        padding: 2rem;
+      ">
+        <div>
+          <h1 style="
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            background: linear-gradient(45deg, #00E5FF, #FF6B35);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+          ">
+            🧠 Consciousness Engine
+          </h1>
+          <p style="color: #B0B0B0; margin-bottom: 2rem;">
+            You need to enable JavaScript to run this revolutionary AI platform.
+          </p>
+          <p style="color: #B0B0B0;">
+            Please enable JavaScript in your browser and refresh the page.
+          </p>
+        </div>
+      </div>
+    </noscript>
+    
+    <div id="root"></div>
+    
+    <!-- Loading indicator while React loads -->
+    <div id="initial-loader" style="
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: #0A0A0A;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 9999;
+    ">
+      <div style="text-align: center; color: #FFFFFF;">
+        <div style="
+          width: 60px;
+          height: 60px;
+          border: 3px solid #00E5FF;
+          border-radius: 50%;
+          border-top: 3px solid transparent;
+          animation: spin 1s linear infinite;
+          margin: 0 auto 1rem;
+        "></div>
+        <p style="color: #00E5FF; font-family: 'Inter', sans-serif;">
+          Initializing Consciousness...
+        </p>
+      </div>
+    </div>
+    
+    <style>
+      @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+      }
+      
+      /* Hide loader once React has loaded */
+      #root:not(:empty) + #initial-loader {
+        display: none;
+      }
+    </style>
+  </body>
+</html>

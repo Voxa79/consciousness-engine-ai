@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🧠 Consciousness Engine - Interface Production</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0A0A0A 0%, #1A1A1A 50%, #2A2A2A 100%);
+            color: #FFFFFF;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .title {
+            color: #00E5FF;
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+        
+        .subtitle {
+            color: #888;
+            font-size: 1.2rem;
+        }
+        
+        .status-bar {
+            background: #1A1A1A;
+            border: 1px solid #333;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .status-item {
+            text-align: center;
+        }
+        
+        .status-value {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #00E5FF;
+        }
+        
+        .status-label {
+            font-size: 0.9rem;
+            color: #AAA;
+        }
+        
+        .chat-container {
+            background: #1A1A1A;
+            border: 1px solid #333;
+            border-radius: 12px;
+            height: 500px;
+            display: flex;
+            flex-direction: column;
+            margin-bottom: 20px;
+        }
+        
+        .chat-messages {
+            flex: 1;
+            overflow-y: auto;
+            padding: 20px;
+        }
+        
+        .message {
+            margin-bottom: 15px;
+            padding: 12px 16px;
+            border-radius: 8px;
+            max-width: 80%;
+        }
+        
+        .message.user {
+            background: #00E5FF;
+            color: #000;
+            margin-left: auto;
+        }
+        
+        .message.ai {
+            background: #2A2A2A;
+            color: #FFF;
+            border: 1px solid #444;
+        }
+        
+        .message-time {
+            font-size: 0.8rem;
+            opacity: 0.7;
+            margin-top: 5px;
+        }
+        
+        .chat-input-container {
+            padding: 20px;
+            border-top: 1px solid #333;
+            display: flex;
+            gap: 10px;
+        }
+        
+        .chat-input {
+            flex: 1;
+            padding: 12px;
+            border: 1px solid #555;
+            border-radius: 6px;
+            background: #2A2A2A;
+            color: #FFF;
+            font-size: 16px;
+        }
+        
+        .send-button {
+            padding: 12px 24px;
+            background: #00E5FF;
+            color: #000;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: background 0.3s;
+        }
+        
+        .send-button:hover:not(:disabled) {
+            background: #00B8CC;
+        }
+        
+        .send-button:disabled {
+            background: #666;
+            cursor: not-allowed;
+        }
+        
+        .metrics-panel {
+            background: #1A1A1A;
+            border: 1px solid #333;
+            border-radius: 8px;
+            padding: 20px;
+            margin-top: 20px;
+        }
+        
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+        }
+        
+        .metric-item {
+            background: #2A2A2A;
+            padding: 15px;
+            border-radius: 6px;
+            text-align: center;
+        }
+        
+        .metric-value {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #00E5FF;
+            margin-bottom: 5px;
+        }
+        
+        .metric-label {
+            color: #AAA;
+            font-size: 0.9rem;
+        }
+        
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid #333;
+            border-radius: 50%;
+            border-top-color: #00E5FF;
+            animation: spin 1s ease-in-out infinite;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        .error-message {
+            background: #5D1A1A;
+            border: 1px solid #FF6B6B;
+            color: #FFB3B3;
+            padding: 10px;
+            border-radius: 6px;
+            margin: 10px 0;
+        }
+        
+        .success-message {
+            background: #1B5E20;
+            border: 1px solid #4CAF50;
+            color: #C8E6C9;
+            padding: 10px;
+            border-radius: 6px;
+            margin: 10px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1 class="title">🧠 Consciousness Engine</h1>
+            <p class="subtitle">Interface Production - Connexion API Temps Réel</p>
+        </div>
+        
+        <div class="status-bar">
+            <div class="status-item">
+                <div class="status-value" id="connection-status">🔄</div>
+                <div class="status-label">Connexion</div>
+            </div>
+            <div class="status-item">
+                <div class="status-value" id="api-status">Vérification...</div>
+                <div class="status-label">API Status</div>
+            </div>
+            <div class="status-item">
+                <div class="status-value" id="response-time">--</div>
+                <div class="status-label">Temps Réponse</div>
+            </div>
+            <div class="status-item">
+                <div class="status-value" id="message-count">0</div>
+                <div class="status-label">Messages</div>
+            </div>
+        </div>
+        
+        <div id="status-messages"></div>
+        
+        <div class="chat-container">
+            <div class="chat-messages" id="chat-messages">
+                <div class="message ai">
+                    <div>Bonjour ! Je suis le Consciousness Engine. Je me connecte à l'API backend...</div>
+                    <div class="message-time" id="init-time"></div>
+                </div>
+            </div>
+            
+            <div class="chat-input-container">
+                <input 
+                    type="text" 
+                    class="chat-input" 
+                    id="message-input" 
+                    placeholder="Tapez votre message ici..."
+                    disabled
+                >
+                <button class="send-button" id="send-button" disabled>
+                    Envoyer
+                </button>
+            </div>
+        </div>
+        
+        <div class="metrics-panel" id="metrics-panel" style="display: none;">
+            <h3 style="margin-bottom: 15px; color: #00E5FF;">Métriques de la Dernière Réponse</h3>
+            <div class="metrics-grid" id="metrics-grid">
+                <!-- Métriques dynamiques -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Configuration API
+        const API_BASE = 'http://localhost:3000/api/v1';
+        const RETRY_ATTEMPTS = 3;
+        const RETRY_DELAY = 1000;
+        
+        // État global
+        let isConnected = false;
+        let messageCount = 0;
+        let lastResponse = null;
+        
+        // Éléments DOM
+        const connectionStatus = document.getElementById('connection-status');
+        const apiStatus = document.getElementById('api-status');
+        const responseTime = document.getElementById('response-time');
+        const messageCountEl = document.getElementById('message-count');
+        const statusMessages = document.getElementById('status-messages');
+        const chatMessages = document.getElementById('chat-messages');
+        const messageInput = document.getElementById('message-input');
+        const sendButton = document.getElementById('send-button');
+        const metricsPanel = document.getElementById('metrics-panel');
+        const metricsGrid = document.getElementById('metrics-grid');
+        const initTime = document.getElementById('init-time');
+        
+        // Initialisation
+        initTime.textContent = new Date().toLocaleTimeString();
+        
+        // Fonctions utilitaires
+        function showMessage(text, type = 'info') {
+            const messageEl = document.createElement('div');
+            messageEl.className = type === 'error' ? 'error-message' : 'success-message';
+            messageEl.textContent = text;
+            statusMessages.appendChild(messageEl);
+            
+            setTimeout(() => {
+                if (messageEl.parentNode) {
+                    messageEl.parentNode.removeChild(messageEl);
+                }
+            }, 5000);
+        }
+        
+        function addChatMessage(content, isUser = false, timestamp = null) {
+            const messageEl = document.createElement('div');
+            messageEl.className = `message ${isUser ? 'user' : 'ai'}`;
+            
+            const contentEl = document.createElement('div');
+            contentEl.textContent = content;
+            messageEl.appendChild(contentEl);
+            
+            const timeEl = document.createElement('div');
+            timeEl.className = 'message-time';
+            timeEl.textContent = timestamp || new Date().toLocaleTimeString();
+            messageEl.appendChild(timeEl);
+            
+            chatMessages.appendChild(messageEl);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+            
+            if (isUser) {
+                messageCount++;
+                messageCountEl.textContent = messageCount;
+            }
+        }
+        
+        function updateMetrics(response) {
+            if (!response) return;
+            
+            metricsGrid.innerHTML = `
+                <div class="metric-item">
+                    <div class="metric-value">${(response.consciousness_level * 100).toFixed(1)}%</div>
+                    <div class="metric-label">Niveau Conscience</div>
+                </div>
+                <div class="metric-item">
+                    <div class="metric-value">${(response.confidence * 100).toFixed(1)}%</div>
+                    <div class="metric-label">Confiance</div>
+                </div>
+                <div class="metric-item">
+                    <div class="metric-value">${(response.ethical_score * 100).toFixed(1)}%</div>
+                    <div class="metric-label">Score Éthique</div>
+                </div>
+                <div class="metric-item">
+                    <div class="metric-value">${response.processing_time_ms}ms</div>
+                    <div class="metric-label">Temps Traitement</div>
+                </div>
+                <div class="metric-item">
+                    <div class="metric-value">${(response.quality_score * 100).toFixed(1)}%</div>
+                    <div class="metric-label">Score Qualité</div>
+                </div>
+                <div class="metric-item">
+                    <div class="metric-value">${response.emotional_state.primary_emotion}</div>
+                    <div class="metric-label">Émotion Primaire</div>
+                </div>
+            `;
+            
+            metricsPanel.style.display = 'block';
+        }
+        
+        // Fonction de requête avec retry
+        async function apiRequest(endpoint, options = {}) {
+            for (let attempt = 1; attempt <= RETRY_ATTEMPTS; attempt++) {
+                try {
+                    const startTime = Date.now();
+                    const response = await fetch(`${API_BASE}${endpoint}`, {
+                        ...options,
+                        headers: {
+                            'Content-Type': 'application/json',
+                            ...options.headers
+                        }
+                    });
+                    
+                    const endTime = Date.now();
+                    responseTime.textContent = `${endTime - startTime}ms`;
+                    
+                    if (!response.ok) {
+                        throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                    }
+                    
+                    return await response.json();
+                } catch (error) {
+                    console.error(`Attempt ${attempt} failed:`, error);
+                    
+                    if (attempt === RETRY_ATTEMPTS) {
+                        throw error;
+                    }
+                    
+                    await new Promise(resolve => setTimeout(resolve, RETRY_DELAY * attempt));
+                }
+            }
+        }
+        
+        // Vérification de connexion
+        async function checkConnection() {
+            try {
+                connectionStatus.innerHTML = '<div class="loading"></div>';
+                apiStatus.textContent = 'Connexion...';
+                
+                const health = await apiRequest('/consciousness/state');
+                
+                isConnected = true;
+                connectionStatus.textContent = '✅';
+                apiStatus.textContent = 'Connecté';
+                
+                messageInput.disabled = false;
+                sendButton.disabled = false;
+                
+                showMessage('Connexion établie avec le Consciousness Engine !', 'success');
+                addChatMessage('Connexion établie ! Je suis prêt à converser avec vous. Comment puis-je vous aider ?');
+                
+            } catch (error) {
+                isConnected = false;
+                connectionStatus.textContent = '❌';
+                apiStatus.textContent = 'Déconnecté';
+                
+                messageInput.disabled = true;
+                sendButton.disabled = true;
+                
+                showMessage(`Erreur de connexion: ${error.message}`, 'error');
+                addChatMessage('Impossible de se connecter au backend. Vérifiez que les services sont démarrés.');
+            }
+        }
+        
+        // Envoi de message
+        async function sendMessage() {
+            const message = messageInput.value.trim();
+            if (!message || !isConnected) return;
+            
+            messageInput.value = '';
+            sendButton.disabled = true;
+            sendButton.innerHTML = '<div class="loading"></div>';
+            
+            addChatMessage(message, true);
+            
+            try {
+                const response = await apiRequest('/consciousness/process', {
+                    method: 'POST',
+                    body: JSON.stringify({
+                        content: message,
+                        user_id: 'web_user',
+                        context: { interface: 'html_production' }
+                    })
+                });
+                
+                addChatMessage(response.content);
+                updateMetrics(response);
+                lastResponse = response;
+                
+            } catch (error) {
+                addChatMessage(`Erreur: ${error.message}`);
+                showMessage(`Erreur lors de l'envoi: ${error.message}`, 'error');
+            } finally {
+                sendButton.disabled = false;
+                sendButton.textContent = 'Envoyer';
+            }
+        }
+        
+        // Event listeners
+        sendButton.addEventListener('click', sendMessage);
+        messageInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault();
+                sendMessage();
+            }
+        });
+        
+        // Initialisation
+        checkConnection();
+        
+        // Vérification périodique de connexion
+        setInterval(() => {
+            if (!isConnected) {
+                checkConnection();
+            }
+        }, 10000);
+        
+        console.log('🧠 Consciousness Engine Interface HTML Pure - Prêt !');
+        console.log('📡 API Base:', API_BASE);
+    </script>
+</body>
+</html>
