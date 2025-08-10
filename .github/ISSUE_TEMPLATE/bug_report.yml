@@ -1,0 +1,25 @@
+name: Bug report
+description: Signaler un bug
+labels: [bug]
+body:
+  - type: textarea
+    id: description
+    attributes:
+      label: Description
+      description: Décrivez le problème rencontré
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Étapes pour reproduire
+    validations:
+      required: true
+  - type: input
+    id: expected
+    attributes:
+      label: Comportement attendu
+  - type: input
+    id: env
+    attributes:
+      label: Environnement (OS, navigateur, version)
